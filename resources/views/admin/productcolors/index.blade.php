@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách danh mục sản phẩm
+    Danh sách biến thể màu
 @endsection
 
 @section('content')
@@ -11,13 +11,13 @@
         <div
             class="page-title-box d-sm-flex align-items-center justify-content-between"
         >
-            <h4 class="mb-sm-0">Danh sách danh mục</h4>
+            <h4 class="mb-sm-0">Danh sách biến thể màu</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item">
                         <a href="javascript: void(0);"
-                            >Danh mục</a
+                            >Biến thể màu</a
                         >
                     </li>
                     <li class="breadcrumb-item active">
@@ -36,7 +36,7 @@
                 <h5 class="card-title mb-0">
                     Danh sách
                 </h5>
-                <a href="{{route('admin.catalogues.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
+                <a href="{{route('admin.productcolors.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
             </div>
             <div class="card-body">
                 <table
@@ -48,8 +48,6 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Cover</th>
-                    <th>Is_active</th>
                     <th>Created at</th>
                     <th>Updated at</th>
                     <th>Action</th>
@@ -61,18 +59,18 @@
                 <tr>
                     <td>{{$item->id}}</td>
                     <td>{{$item->name}}</td>
-                    <td><img src="{{\Storage::url($item->cover)}}" alt="" width="50px"></td>
-                    <td>{!!$item->is_active 
-                        ? '<span class="badge bg-primary">YES</span>' 
-                        : '<span class="badge bg-danger">NO</span>'!!}</td>
                     <td>{{$item->created_at}}</td>
                     <td>{{$item->updated_at}}</td>
-                    <td>
-                        <a href="{{route('admin.catalogues.show', $item->id)}}" class="btn btn-primary mb-3">Xem</a>
-                        <a href="{{route('admin.catalogues.edit', $item->id)}}" class="btn btn-warning mb-3">Sửa</a>
-                        <a href="{{route('admin.catalogues.destroy', $item->id)}}" 
-                            onclick="return confirm('Chắc chắn chưa?')"
-                            class="btn btn-danger mb-3">Xóa</a>
+                    <td class="d-flex">
+                        <a href="{{route('admin.productcolors.show', $item->id)}}" class="btn btn-primary mb-3   me-2">Xem</a>
+                        <a href="{{route('admin.productcolors.edit', $item->id)}}" class="btn btn-warning mb-3 me-2">Sửa</a>
+                        <a>
+                            <form action="{{ route('admin.productcolors.destroy',$item) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" onclick="return confirm('Chắc chắn không')" class="btn btn-danger">Delete</button>
+                            </form>
+                        </a>
                     </td>
                 </tr>
                 @endforeach

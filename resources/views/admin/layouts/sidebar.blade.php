@@ -73,6 +73,32 @@
                         </ul>
                     </div>
                 </li> <!-- end Dashboard Menu -->
+
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarVariant" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarVariant">
+                        <i class="ri-bubble-chart-fill"></i> <span data-key="t-authentication">Biến thể</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarVariant">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="#sidebarColor" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarColor" data-key="t-signin">Color
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarColor">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.productcolors.index') }}" class="nav-link" data-key="t-basic"> Danh sách
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="auth-signin-cover.html" class="nav-link" data-key="t-cover"> Thêm mới
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<table>
+<table class="table table-bodered">
     <tr>
         <th>Trường</th>
         <th>Giá trị</th>
