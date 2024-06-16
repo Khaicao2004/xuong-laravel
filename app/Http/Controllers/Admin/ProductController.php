@@ -61,14 +61,14 @@ class ProductController extends Controller
         }
 
         $dataProductVariantsTmp = $request->product_variants;
-        // dd($dataProductVariantsTmp);
         $dataProductVariants = [];
+        // dd($dataProductVariantsTmp);
         foreach ($dataProductVariantsTmp as $key => $item) {
             $tmp = explode('-', $key);
             $dataProductVariants[] = [
                 'product_size_id' => $tmp[0],
                 'product_color_id' => $tmp[1],
-                'quatity' => $item['quatity'],
+                'quatity' => $item['quatity'] ?? 0,
                 'image' => $item['image'] ?? null,
             ];
         }
@@ -81,19 +81,21 @@ class ProductController extends Controller
           
             /**@var Product $product */
             $product = Product::query()->create($dataProduct);
-            
+
             foreach($dataProductVariants as $dataProductVariant){
                 $dataProductVariant['product_id'] = $product->id;
                 if($dataProductVariant['image']){
                     $dataProductVariant['image'] = Storage::put('products', $dataProductVariant['image']);
                 }
                 ProductVariant::query()->create($dataProductVariant);
+                //  dd($dataProductVariants);
+
             }
 
             $product->tags()->sync($dataProductTags);
             foreach($dataProductGalleries as $image){
                 ProductGallery::query()->create([
-                     'product_id' => $product->id,
+                     'product_id' => $product->id,  
                      'image' => Storage::put('products', $image)
                 ]);
             }
