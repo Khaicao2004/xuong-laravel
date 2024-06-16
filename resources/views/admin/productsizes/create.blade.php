@@ -1,18 +1,17 @@
 @extends('admin.layouts.master')
 
 @section('title')
-   Cập nhật biến thể màu: {{$productcolor->name}}
+    Thêm mới biến thể size
 @endsection
 
 @section('content')
-<form action="{{route('admin.productcolors.update',$productcolor)}}" method="POST">
+<form action="{{route('admin.productsizes.store')}}" method="POST">
     @csrf
-    @method('PUT')
     <div class="row">
       <div class="col-lg-12">
           <div class="card">
-                  <div class="card-header align-items-center d-flex">
-                  <h4 class="card-title mb-0 flex-grow-1">Cập nhật biến thể màu: {{$productcolor->name}}</h4>
+              <div class="card-header align-items-center d-flex">
+                  <h4 class="card-title mb-0 flex-grow-1">Thêm mới biến thể size</h4>
               </div><!-- end card header -->
               <div class="card-body">
                   <div class="live-preview">
@@ -20,7 +19,7 @@
                           <div class="col-md-4">
                               <div>
                                   <label for="name" class="form-label">Name</label>
-                                  <input type="text" class="form-control" id="name" name="name" value="{{ $productcolor->name }}">
+                                  <input type="text" class="form-control" id="name" name="name">
                               </div>       
                           </div>
                           <div class="col-md-8">

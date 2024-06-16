@@ -90,7 +90,23 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="auth-signin-cover.html" class="nav-link" data-key="t-cover"> Thêm mới
+                                            <a href="{{ route('admin.productcolors.create') }}" class="nav-link" data-key="t-cover"> Thêm mới
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#sidebarSize" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSize" data-key="t-signin">Size
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarSize">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.productsizes.index') }}" class="nav-link" data-key="t-basic"> Danh sách
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.productsizes.create') }}" class="nav-link" data-key="t-cover"> Thêm mới
                                             </a>
                                         </li>
                                     </ul>
