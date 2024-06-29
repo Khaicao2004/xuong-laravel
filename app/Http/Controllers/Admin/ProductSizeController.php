@@ -63,9 +63,7 @@ class ProductSizeController extends Controller
      */
     public function update(Request $request, ProductSize $productsize)
     {
-        $data = [
-            'name' => $request->name 
-          ];
+       $data = $request->all();
        $productsize->update($data);
        return back();
     }

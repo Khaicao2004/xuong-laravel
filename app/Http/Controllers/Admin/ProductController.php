@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PhpParser\Node\Expr\Cast\String_;
 
 class ProductController extends Controller
 {
@@ -25,7 +26,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Product::query()->with(['catelogue', 'tags'])->latest('id')->paginate(5);
+        $data = Product::query()->with(['catelogue', 'tags'])->latest('id')->get();
         // dd($data->first()->toArray());             
         return view(self::PATH_VIEW . __FUNCTION__, compact('data'));
     }
@@ -56,7 +57,7 @@ class ProductController extends Controller
         $dataProduct['is_show_home'] = isset($dataProduct['is_active']) ? 1 : 0;
         $dataProduct['slug'] = Str::slug($dataProduct['name']) . '-' . $dataProduct['sku'];
 
-        if($dataProduct['img_thumbnail']){
+        if ($dataProduct['img_thumbnail']) {
             $dataProduct['img_thumbnail'] = Storage::put('products', $dataProduct['img_thumbnail']);
         }
 
@@ -76,15 +77,15 @@ class ProductController extends Controller
 
         $dataProductTags = $request->tags;
         $dataProductGalleries = $request->product_galleries ?: [];
-        try {   
+        try {
             DB::beginTransaction();
-          
+
             /**@var Product $product */
             $product = Product::query()->create($dataProduct);
 
-            foreach($dataProductVariants as $dataProductVariant){
+            foreach ($dataProductVariants as $dataProductVariant) {
                 $dataProductVariant['product_id'] = $product->id;
-                if($dataProductVariant['image']){
+                if ($dataProductVariant['image']) {
                     $dataProductVariant['image'] = Storage::put('products', $dataProductVariant['image']);
                 }
                 ProductVariant::query()->create($dataProductVariant);
@@ -93,16 +94,15 @@ class ProductController extends Controller
             }
 
             $product->tags()->sync($dataProductTags);
-            foreach($dataProductGalleries as $image){
+            foreach ($dataProductGalleries as $image) {
                 ProductGallery::query()->create([
-                     'product_id' => $product->id,  
-                     'image' => Storage::put('products', $image)
+                    'product_id' => $product->id,
+                    'image' => Storage::put('products', $image)
                 ]);
             }
             DB::commit();
 
             return redirect()->route('admin.products.index');
-
         } catch (Exception $exception) {
             DB::rollBack();
             return back();
@@ -112,20 +112,35 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(string $sku)
     {
-        // $model = Product::query()->findOrFail($id);
-        // return view(self::PATH_VIEW . __FUNCTION__, compact('model'));
-
+        $product = Product::query()->with(['catelogue'])->where('sku', 'LIKE', $sku)->first();
+        $id = $product->id;
+        $colors = ProductColor::query()->pluck('name', 'id')->all();
+        $sizes = ProductSize::query()->pluck('name', 'id')->all();
+        $variants = Product::with('variants')->find($id)->variants;
+        $galleries = Product::with('galleries')->find($id)->galleries;
+        $tags = Product::with('tags')->find($id)->tags;
+        // dd($tags);
+        return view(self::PATH_VIEW . __FUNCTION__, compact('colors', 'sizes', 'galleries', 'product', 'variants', 'tags'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(string $sku)
     {
-        // $model = Product::query()->findOrFail($id);
-        // return view(self::PATH_VIEW . __FUNCTION__, compact('model'));
+        $product = Product::query()->where('sku', 'LIKE', $sku)->first();
+        $id = $product->id;
+        $catelogues = Catelogue::query()->pluck('name', 'id')->all();
+        $colors = ProductColor::query()->pluck('name', 'id')->all();
+        $sizes = ProductSize::query()->pluck('name', 'id')->all();
+        $tags = Tag::query()->pluck('name', 'id')->all();
+        $variants = Product::with('variants')->find($id)->variants;
+        $galleries = Product::with('galleries')->find($id)->galleries;
+        $productTags = Product::with('tags')->find($id)->tags;
+        // dd($tags);
+        return view(self::PATH_VIEW . __FUNCTION__, compact('catelogues', 'colors', 'sizes', 'galleries', 'product', 'variants', 'tags', 'productTags'));
     }
 
     /**
@@ -133,7 +148,79 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $dataProduct = $request->except(['product_variants', 'tags', 'product_galleries']);
+        $dataProduct['is_active'] = isset($dataProduct['is_active']) ? 1 : 0;
+        $dataProduct['is_hot_deal'] = isset($dataProduct['is_active']) ? 1 : 0;
+        $dataProduct['is_good_deal'] = isset($dataProduct['is_active']) ? 1 : 0;
+        $dataProduct['is_new'] = isset($dataProduct['is_active']) ? 1 : 0;
+        $dataProduct['is_show_home'] = isset($dataProduct['is_active']) ? 1 : 0;
+        $dataProduct['slug'] = Str::slug($dataProduct['name']) . '-' . $dataProduct['sku'];
+        $galleries = Product::with('galleries')->find($product->id)->galleries->toArray();
+        // dd($request->product_galleries);
+        // $productID = Product::query()->where('sku', 'LIKE', $request->sku)->first();
+        // dd($productID);
+        if ($request->has('product_galleries')) {
+            foreach ($request->product_galleries as $key => $image) {
+                
+                if ($image != null) {
+                    $imgPath = Storage::put('products', $image);
+                    if($galleries != []){
+                        ProductGallery::updateOrCreate(
+                            ['id' => $galleries[$key]['id']],
+                            ['image' => $imgPath],
+                        );
+                    }else{
+                        $imgPath = Storage::put('products', $image);
+                        ProductGallery::query()->create([
+                            'product_id' => $product->id,
+                            'image' => $imgPath,
+                        ]);
+                    }
+                    
+                }
+            }
+        }
+        
+        try {
+            DB::beginTransaction();
+            /**@var Product $product */
+            if ($request->hasFile('img_thumbnail')) {
+                $dataProduct['img_thumbnail'] = Storage::put('products', $dataProduct['img_thumbnail']);
+            }
+            $product->update($dataProduct);
+            // dd($product);
+            if ($request->has('product_variants')) {
+                foreach ($request->product_variants as $key => $variant) {
+                    if (!is_null($variant['quatity'])) {
+                        $tmp = explode('-', $key);
+                        $variant['product_size_id'] = $tmp[0];
+                        $variant['product_color_id'] =  $tmp[1];
+
+                        if (isset($variant['image'])) {
+                            $variant['image'] = Storage::put('products', $variant['image']);
+                        }
+                    }
+                    ProductVariant::updateOrCreate([
+                        'product_id' => $product->id,
+                        'product_size_id' => $variant['product_size_id'],
+                        'product_color_id' => $variant['product_color_id'],
+                    ], $variant);
+                }
+            }
+
+            if ($request->has('tags')) {
+                $product->tags()->sync($request->tags);
+            } else {
+                $product->tags()->sync($product->tags);
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.products.index');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return back();
+        }
     }
 
     /**
@@ -141,16 +228,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        try{
-            DB::transaction(function () use($product){
+        try {
+            DB::transaction(function () use ($product) {
                 $product->tags()->sync([]);
                 $product->galleries()->delete();
                 $product->variants()->delete();
                 $product->delete();
-
             }, 3);
-        return back();
-        }catch(Exception $exception){
+            return back();
+        } catch (Exception $exception) {
         }
     }
 }

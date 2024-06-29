@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title')
-    Danh sách biến thể màu
+    Danh sách tài khoản
 @endsection
 
 @section('content')
@@ -11,13 +11,13 @@
         <div
             class="page-title-box d-sm-flex align-items-center justify-content-between"
         >
-            <h4 class="mb-sm-0">Danh sách biến thể màu</h4>
+            <h4 class="mb-sm-0">Danh sách tài khoản</h4>
 
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item">
                         <a href="javascript: void(0);"
-                            >Biến thể màu</a
+                            >Tài khoản</a
                         >
                     </li>
                     <li class="breadcrumb-item active">
@@ -36,7 +36,7 @@
                 <h5 class="card-title mb-0">
                     Danh sách
                 </h5>
-                <a href="{{route('admin.productcolors.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
+                <a href="{{route('admin.users.create')}}" class="btn btn-primary mb-3">Thêm mới</a>
             </div>
             <div class="card-body">
                 <table
@@ -47,8 +47,9 @@
                <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Color</th>
                     <th>Name</th>
+                    <th>Email</th>
+                    <th>Type</th>
                     <th>Created at</th>
                     <th>Updated at</th>
                     <th>Action</th>
@@ -59,23 +60,20 @@
                 @foreach ($data as $item)         
                 <tr>
                     <td>{{$item->id}}</td>
-                    <td>
-                        <div style="width: 50px; height: 50px; background: {{ $item->name }} ">
-                        </div>
-                    </td>
                     <td>{{$item->name}}</td>
+                    <td>{{$item->email}}</td>
+                    <td>{{ $item->type}}</td>
                     <td>{{$item->created_at}}</td>
                     <td>{{$item->updated_at}}</td>
                     <td class="d-flex">
-                        <a href="{{route('admin.productcolors.show', $item->id)}}" class="btn btn-primary mb-3   me-2">Xem</a>
-                        <a href="{{route('admin.productcolors.edit', $item->id)}}" class="btn btn-warning mb-3 me-2">Sửa</a>
-                        <a>
-                            <form action="{{ route('admin.productcolors.destroy',$item) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Chắc chắn không')" class="btn btn-danger">Delete</button>
-                            </form>
-                        </a>
+                        <a href="{{route('admin.users.show', $item->id)}}" class="btn btn-primary mb-3 me-2">Xem</a>
+                        <a href="{{route('admin.users.edit', $item->id)}}" class="btn btn-warning mb-3 me-2">Sửa</a>
+                        <form action="{{route('admin.users.destroy', $item->id)}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Chắc chắn chưa?')"
+                            class="btn btn-danger mb-3">Xóa</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach

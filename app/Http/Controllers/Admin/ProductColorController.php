@@ -62,9 +62,7 @@ class ProductColorController extends Controller
      */
     public function update(Request $request, ProductColor $productcolor)
     {
-        $data = [
-            'name' => $request->name 
-          ];
+       $data = $request->all();
        $productcolor->update($data);
        return back();
     }
