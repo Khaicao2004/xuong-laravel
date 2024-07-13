@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    public function index(){
+        $products = Product::query()->latest('id')->paginate(5);
+        return view('index',compact('products'));
+    }
     public function detail($slug){
         $product = Product::query()->with('variants')->where('slug', $slug)->first();
         $colors = ProductColor::query()->pluck('name', 'id')->all();

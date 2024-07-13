@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Catelogue;
 use App\Models\Product;
 use App\Models\ProductColor;
@@ -47,7 +48,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         $dataProduct = $request->except(['product_variants', 'tags', 'product_galleries']);
         $dataProduct['is_active'] = isset($dataProduct['is_active']) ? 1 : 0;
@@ -102,10 +103,10 @@ class ProductController extends Controller
             }
             DB::commit();
 
-            return redirect()->route('admin.products.index');
+            return redirect()->route('admin.products.index')->with('success','Thao tac thanh cong');
         } catch (Exception $exception) {
             DB::rollBack();
-            return back();
+            return back()->with('error','That bai');
         }
     }
 
@@ -161,22 +162,13 @@ class ProductController extends Controller
         // dd($productID);
         if ($request->has('product_galleries')) {
             foreach ($request->product_galleries as $key => $image) {
-                
-                if ($image != null) {
+      
                     $imgPath = Storage::put('products', $image);
                     if($galleries != []){
                         ProductGallery::updateOrCreate(
                             ['id' => $galleries[$key]['id']],
                             ['image' => $imgPath],
                         );
-                    }else{
-                        $imgPath = Storage::put('products', $image);
-                        ProductGallery::query()->create([
-                            'product_id' => $product->id,
-                            'image' => $imgPath,
-                        ]);
-                    }
-                    
                 }
             }
         }
@@ -207,12 +199,8 @@ class ProductController extends Controller
                     ], $variant);
                 }
             }
-
-            if ($request->has('tags')) {
-                $product->tags()->sync($request->tags);
-            } else {
-                $product->tags()->sync($product->tags);
-            }
+    
+            $product->tags()->sync($request->tags);
 
             DB::commit();
 

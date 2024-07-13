@@ -291,12 +291,3 @@
 </form>
   @endsection
 
-@section('script-libs')
-    <script src="https:////cdn.ckeditor.com/4.8.0/basic/ckeditor.js"></script>
-@endsection
-
-@section('scripts')
-<script>
-CKEDITOR.replace( 'content');
-</script>
-@endsection

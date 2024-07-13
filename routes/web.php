@@ -24,11 +24,12 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    $products = Product::query()->limit(5)->get();
-    // dd($products);
-    return view('welcome',compact('products'));
-})->name('welcome');
+// Route::get('/', function () {
+//     $products = Product::query()->limit(5)->get();
+//     // dd($products);
+//     return view('welcome',compact('products'));
+// })->name('welcome');
+Route::get('/',[ProductController::class, 'index'])->name('index');
 Route::get('/admin',function(){
     return 'Day la admin';
 })->middleware('isAdmin');

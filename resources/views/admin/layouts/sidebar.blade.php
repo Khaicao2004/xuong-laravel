@@ -43,7 +43,7 @@
                    <li class="nav-item">
                        <a class="nav-link menu-link" href="#sidebarCatalogues" data-bs-toggle="collapse" role="button"
                            aria-expanded="false" aria-controls="sidebarCatalogues">
-                           <i class="ri-layout-3-line"></i>
+                           <i class="bx bx-menu"></i>
                            <span data-key="t-layouts">Danh mục sản phẩm</span>
                        </a>
                        <div class="collapse menu-dropdown" id="sidebarCatalogues">
@@ -126,7 +126,7 @@
                    <li class="nav-item">
                        <a class="nav-link menu-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
                            aria-expanded="false" aria-controls="sidebarUsers">
-                           <i class="ri-layout-3-line"></i>
+                           <i class=" bx bx-user-circle"></i>
                            <span data-key="t-layouts">Tài khoản</span>
                        </a>
                        <div class="collapse menu-dropdown" id="sidebarUsers">
@@ -140,6 +140,20 @@
                            </ul>
                        </div>
                    </li>
+                   <li class="nav-item">
+                    <a class="nav-link menu-link" href="#sidebarOrders" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarOrders">
+                        <i class="ri-store-3-line"></i>
+                        <span data-key="t-layouts">Đơn hàng</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="sidebarOrders">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('admin.orders.index') }}" class="nav-link">Danh sách</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                </ul>
            </div>
            <!-- Sidebar -->

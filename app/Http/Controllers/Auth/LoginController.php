@@ -9,6 +9,7 @@ class LoginController extends Controller
 {
     public function showFormLogin()
     {
+
         return view('auth.login');
     }
     public function login(Request $request)
@@ -24,7 +25,7 @@ class LoginController extends Controller
             if(Auth::user()->isAdmin()){
                 return redirect('/admin');
             }
-            return redirect()->intended('/home');
+            return redirect()->intended('/');
         }
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
