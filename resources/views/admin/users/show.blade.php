@@ -28,13 +28,7 @@
                         </div> 
                       </div>
                       <div class="row gy-4 mt-3">
-                        <div class="col-md-6">
-                            <div>
-                                <label for="password" class="form-label">Mật khẩu</label>
-                                <input type="text" class="form-control" id="password" name="password" value="{{ $user->password  }}" disabled>                           
-                            </div>        
-                        </div> 
-                        <div class="col-md-6">
+                        <div class="col-12">
                           <div>
                             <label for="password" class="form-label">Type</label>
                             <input type="text" name="type" id="type" class="form-control" value="{{ $user->type }}" disabled>

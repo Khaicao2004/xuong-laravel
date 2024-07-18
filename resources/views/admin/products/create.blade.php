@@ -159,7 +159,7 @@
                                     </div>
                                   </td>
                                   <td>
-                                    <input type="text" class="form-control"
+                                    <input type="number" class="form-control"
                                     value="0"
                                     name="product_variants[{{ $sizeID . '-' . $colorID }}][quatity]">
                                   </td>

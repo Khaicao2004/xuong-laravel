@@ -31,13 +31,7 @@
                         </div> 
                       </div>
                       <div class="row gy-4 mt-3">
-                        <div class="col-md-6">
-                            <div>
-                                <label for="password" class="form-label">Mật khẩu</label>
-                                <input type="password" class="form-control" id="password" name="password" value="{{ $user->email }}">                           
-                            </div>        
-                        </div> 
-                        <div class="col-md-6">
+                        <div class="col-12">
                           <div>
 
                             <label for="type" class="form-label">Type</label>                     

@@ -10,11 +10,12 @@ class CartController extends Controller
 {
     public function list(){
         $cart = session('cart');
+        // dd($cart);
         $totalAmount = 0;
        foreach ($cart as  $item) {
             $totalAmount += $item['quantity'] * ($item['price_sale'] ?: $item['price_regular']);
        }
-       return view('cart-list',compact('totalAmount'));
+       return view('client.cart-list',compact('totalAmount'));
     }
     public function add(){
         $product = Product::query()->findOrFail(request('product_id'));
