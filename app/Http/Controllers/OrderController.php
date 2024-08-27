@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -14,12 +15,16 @@ class OrderController extends Controller
     {
         try {
             DB::transaction(function () {
-                $user = User::query()->create([
-                    'name' => request('user_name'),
-                    'email' => request('user_email'),
-                    'password' => bcrypt(request('user_email')),
-                    'is_active' => false,
-                ]);
+                if(Auth::check()){
+                    $user = Auth::user();
+                }else{
+                    $user = User::query()->create([
+                        'name' => request('user_name'),
+                        'email' => request('user_email'),
+                        'password' => bcrypt(request('user_email')),
+                        'is_active' => false,
+                    ]);
+                }
                 $totalAmount = 0;
                 $dataItem = [];
                 foreach (session('cart') as $variantID => $item) {
@@ -55,7 +60,7 @@ class OrderController extends Controller
 
             session()->forget('cart');
 
-            return redirect()->route('welcome')->with('success', 'Đặt hàngthành công');
+            return redirect()->route('index')->with('success', 'Đặt hàngthành công');
         } catch (\Exception $exception) {
             return back()->with('error', 'Lỗi đặt hàng');
         }

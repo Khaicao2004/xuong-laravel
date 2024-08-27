@@ -14,28 +14,38 @@
                 </div>
             </div>
 
-            <div class="col-6 col-md-4 order-3 order-md-3 text-right">
+            <div class="col-6 col-md-4 order-3 text-md-right">
                 <div class="site-top-icons">
-                    <ul>
-                        <li>
-                            <a href="{{ route('login') }}"><span class="icon icon-person"></span></a>
-                        </li>
-                        <li>
-                            <a href="#"><span class="icon icon-heart-o"></span></a>
-                        </li>
-                        <li>
-                            <a href="{{ route('cart.list') }}" class="site-cart">
-                                <span class="icon icon-shopping_cart"></span>
-                                <span class="count">2</span>
+                    <ul class="list-unstyled d-flex justify-content-end align-items-center">
+                        <li class="mr-3">
+                            <a href="{{ route('cart.list') }}" class="site-cart d-flex align-items-center">
+                                <span class="icon icon-shopping_cart me-1"></span>
+                                <span class="count badge bg-primary">{{ count(session('cart', [])) }}</span>
                             </a>
                         </li>
-                        <li class="d-inline-block d-md-none ml-md-0">
-                            <a href="#" class="site-menu-toggle js-menu-toggle"><span
-                                    class="icon-menu"></span></a>
+                        <li class="d-inline-block d-md-none">
+                            <a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a>
                         </li>
+                        @if (!Auth::user())
+                        <li class="ms-3">
+                            <a href="{{ route('login') }}" class="d-flex align-items-center">
+                                <span class="icon icon-person"></span>
+                            </a>
+                        </li>   
+                        @else   
+                        <li class="ms-3">
+                            <form action="{{ route('logout') }}" method="POST" class="d-flex align-items-center">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                                </button>
+                            </form>
+                        </li>   
+                        @endif
                     </ul>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>

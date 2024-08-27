@@ -149,7 +149,7 @@
                               <th>Quantity</th>
                               <th>Image</th>
                             </tr>
-                            @foreach ($sizes as $sizeID => $sizeName)
+                            @foreach ($sizes as $sizeID => $sizeName) 
                               @foreach ($colors as $colorID => $colorName)
                                 <tr class="text-center">
                                   <td>{{ $sizeName }}</td>

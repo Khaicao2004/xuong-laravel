@@ -24,14 +24,19 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required|max:255|min:10',
             'sku' => 'required|max:255|unique:products',
-            'img_thumbnail' => 'image',
+            'img_thumbnail' => 'image|mimes:png,jpg',
             'price_regular' => 'required|min:0',
             'price_sale' => 'required|min:0',
             'description' => 'max:255',
             'content' => 'max:60000',
             'material' => 'max:255',
             'user_manual' => 'max:255',
-
-        ];
+            
+            'tags' => 'array|required',
+            'tag.*' => 'integer|exists:tags,id',
+            'product_galleries' => 'array',
+            'product_galleries.*' => 'image|mimes:png,jpg|max:2048',
+            'product_variants   ' => 'array',
+        ];  
     }
 }

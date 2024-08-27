@@ -50,6 +50,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        dd($request->all());
         $dataProduct = $request->except(['product_variants', 'tags', 'product_galleries']);
         $dataProduct['is_active'] = isset($dataProduct['is_active']) ? 1 : 0;
         $dataProduct['is_hot_deal'] = isset($dataProduct['is_active']) ? 1 : 0;
