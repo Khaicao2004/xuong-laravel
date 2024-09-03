@@ -17,18 +17,7 @@ Route::prefix('admin')
         return view('admin.dashboard');
     })->name('dashboard');
     
-    Route::prefix('catalogues')
-        ->as('catalogues.')
-        ->group(function () {
-            Route::get('/',                 [CatalogueController::class, 'index'])->name('index');
-            Route::get('create',            [CatalogueController::class, 'create'])->name('create');
-            Route::post('store',            [CatalogueController::class, 'store'])->name('store');
-            Route::get('show/{id}',         [CatalogueController::class, 'show'])->name('show');
-            Route::get('{id}/edit',         [CatalogueController::class, 'edit'])->name('edit');
-            Route::put('{id}/update',       [CatalogueController::class, 'update'])->name('update');
-            Route::get('{id}/destroy',   [CatalogueController::class, 'destroy'])->name('destroy');
-
-        });
+    Route::resource('catalogues', CatalogueController::class);
     Route::resource('products',ProductController::class);
     Route::resource('productcolors',ProductColorController::class);
     Route::resource('productsizes',ProductSizeController::class);
